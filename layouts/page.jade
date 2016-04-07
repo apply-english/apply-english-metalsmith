@@ -1,0 +1,7 @@
+extends layout.jade
+
+block content
+    ul
+        each release in pagination.files
+            li
+                a(href=pagination.index === 0 ? release.path : "../" + release.path)= "#" + release.number + " - " + release.title

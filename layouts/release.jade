@@ -1,0 +1,22 @@
+extends layout.jade
+
+block title
+    title= title
+block content
+    article
+        header
+            h2= "#" + number + " - " + title
+        iframe(src=youTubeUrl, controls="2",frameborder="0", allowfullscreen)        
+        != contents
+        hr
+        #disqus_thread
+            script.
+                var disqus_config = function () {
+                    this.page.identifier = '#{id}';
+                };
+                (function() {
+                    var d = document, s = d.createElement('script');
+                    s.src = '//apply-english.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                })();
