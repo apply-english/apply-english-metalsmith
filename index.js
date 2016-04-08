@@ -8,6 +8,10 @@ var formatcheck = require('metalsmith-formatcheck');
 var permalinks = require('metalsmith-permalinks');
 var fileMetadata = require('metalsmith-filemetadata');
 var pagination = require('metalsmith-pagination');
+var env = require('metalsmith-env');
+var excerptor = require('metalsmith-excerptor');
+
+var perPage = 3;
 
 function trace(){
   return function trace(files, metalsmith, done) {
@@ -16,8 +20,14 @@ function trace(){
 }
 
 Metalsmith(__dirname)
+    .use(env())
     .use(markdown({
         gfm: true
+    }))
+    .use(excerptor({
+        maxLength: 300,
+        keepImageTag: false,
+        ellipsis: '&hellip;'
     }))
     .use(collections({
         releases: {
@@ -45,11 +55,15 @@ Metalsmith(__dirname)
     }))
     .use(pagination({
         'collections.releases': {
-            perPage: 3,
+            perPage: perPage,
             layout: 'page.jade',
             first: 'index.html',
             noPageOne: true,
-            path: ':num/index.html'
+            path: ':name/index.html',
+            groupBy: function(page) {
+                var mod = Math.floor(page.number / perPage);
+                return (mod * perPage) + '-' + (((mod + 1) * perPage) - 1);
+            }
         }
     }))
     .use(jade({
@@ -73,7 +87,7 @@ Metalsmith(__dirname)
             wrap_line_length: 0
         }
     }))
-    //.use(formatcheck())
+    .use(trace())
     .build(function (err) {
         if (err) {
             console.error(err);
