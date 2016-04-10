@@ -1,19 +1,20 @@
 extends layout.jade
 
 block content
-    - var pathPrefix = pagination.index === 0 ? '' : '../';
     - function getPagePath(pagination) { return pagination.index === 0 ? '' : pagination.name; }
 
-        each release in pagination.files
-            article
-                h2
-                    a(href=pathPrefix + release.path)= "#" + release.number + " - " + release.title
-                img(src=release.banner.url, alt=release.banner.title)
-                != release.excerpt
-    #pagination
+    each release in pagination.files
+        article
+            h2
+                a(href=release.path)= "#" + release.number + " - " + release.title
+            img(src=release.banner.url, alt=release.banner.title)
+            != release.excerpt
+    hr
+    .pagination
         if pagination.next
-            a(href=pathPrefix + getPagePath(pagination.next.pagination)) <-
+            a.previous(href=getPagePath(pagination.next.pagination)) &lArr;
         if pagination.previous && pagination.next
-            |&#32;|&#32;
+            |&#32;
         if pagination.previous
-            a(href=pathPrefix + getPagePath(pagination.previous.pagination)) ->
+            a.next(href=getPagePath(pagination.previous.pagination)) &rArr;
+        .clear

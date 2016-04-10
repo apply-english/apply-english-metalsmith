@@ -1,0 +1,7 @@
+---
+layout: null
+permalink: false
+---User-agent: *
+Disallow:
+
+Sitemap: http://apply-english.github.io/sitemap.xml
